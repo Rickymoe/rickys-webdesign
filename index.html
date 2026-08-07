@@ -392,6 +392,29 @@
   .field input::placeholder, .field textarea::placeholder{ color:#6B7360; }
   .contact .btn-primary{ align-self:flex-start; margin-top:4px; }
   .contact .btn-primary:disabled{ opacity:0.6; cursor:default; }
+  .btn-spinner{
+    display:none; grid-template-columns:repeat(4,1fr); grid-template-rows:repeat(4,1fr);
+    gap:1px; width:14px; height:14px; margin-right:8px; vertical-align:-2px;
+  }
+  .btn-spinner.active{ display:inline-grid; }
+  .btn-spinner span{ background:currentColor; opacity:0.25; border-radius:1px; animation:lm-btn-twinkle 1.2s ease-in-out infinite; }
+  .btn-spinner span:nth-child(1){ animation-delay:0s; }
+  .btn-spinner span:nth-child(2){ animation-delay:0.075s; }
+  .btn-spinner span:nth-child(3){ animation-delay:0.15s; }
+  .btn-spinner span:nth-child(4){ animation-delay:0.225s; }
+  .btn-spinner span:nth-child(5){ animation-delay:0.3s; }
+  .btn-spinner span:nth-child(6){ animation-delay:0.375s; }
+  .btn-spinner span:nth-child(7){ animation-delay:0.45s; }
+  .btn-spinner span:nth-child(8){ animation-delay:0.525s; }
+  .btn-spinner span:nth-child(9){ animation-delay:0.6s; }
+  .btn-spinner span:nth-child(10){ animation-delay:0.675s; }
+  .btn-spinner span:nth-child(11){ animation-delay:0.75s; }
+  .btn-spinner span:nth-child(12){ animation-delay:0.825s; }
+  .btn-spinner span:nth-child(13){ animation-delay:0.9s; }
+  .btn-spinner span:nth-child(14){ animation-delay:0.975s; }
+  .btn-spinner span:nth-child(15){ animation-delay:1.05s; }
+  .btn-spinner span:nth-child(16){ animation-delay:1.125s; }
+  @keyframes lm-btn-twinkle{ 0%,100%{ opacity:0.25; } 50%{ opacity:1; } }
   .form-note{ font-size:12.5px; color:#828C6E; margin-top:2px; }
   .form-error{ display:none; background:#3A1F1F; border:1px solid #5C2A2A; color:#E8B4B4; padding:12px 14px; border-radius:8px; font-size:13.5px; }
   .form-error.visible{ display:block; }
@@ -405,8 +428,19 @@
   footer{
     background:var(--ink); color:#828C6E; border-top:1px solid #2C3524;
     padding:26px 0; font-family:'IBM Plex Mono', monospace; font-size:12px;
+    position:relative; overflow:hidden;
   }
-  .footer-row{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+  footer::before{
+    content:'';
+    position:absolute; inset:0;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16'><rect x='3' y='3' width='8' height='8' rx='1.5' fill='%23BD8B3B'/></svg>");
+    background-size:16px 16px;
+    opacity:0.1;
+    -webkit-mask-image:linear-gradient(to top, #000 0%, transparent 100%);
+    mask-image:linear-gradient(to top, #000 0%, transparent 100%);
+    pointer-events:none;
+  }
+  .footer-row{ position:relative; z-index:1; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; }
 
   .reveal{ opacity:0; transform:translateY(14px); transition:opacity 0.6s ease, transform 0.6s ease; }
   .reveal.in{ opacity:1; transform:none; }
@@ -582,7 +616,10 @@
         <label for="melding">Melding</label>
         <textarea id="melding" name="melding" placeholder="Fortell litt om bedriften og hva dere trenger" required></textarea>
       </div>
-      <button type="submit" class="btn btn-primary">Send melding</button>
+      <button type="submit" class="btn btn-primary">
+        <span class="btn-spinner" id="btn-spinner"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span>
+        <span id="btn-label">Send melding</span>
+      </button>
     </form>
     <div class="form-success" id="form-success">
       <div class="check"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg></div>
@@ -597,10 +634,13 @@
     e.preventDefault();
     const form = document.getElementById('kontakt-form');
     const btn = form.querySelector('button[type="submit"]');
+    const spinner = document.getElementById('btn-spinner');
+    const label = document.getElementById('btn-label');
     const errorBox = document.getElementById('form-error');
 
     btn.disabled = true;
-    btn.textContent = 'Sender…';
+    spinner.classList.add('active');
+    label.textContent = 'Sender…';
     errorBox.classList.remove('visible');
 
     try {
@@ -618,7 +658,8 @@
       }
     } catch {
       btn.disabled = false;
-      btn.textContent = 'Send melding';
+      spinner.classList.remove('active');
+      label.textContent = 'Send melding';
       errorBox.classList.add('visible');
     }
   }
