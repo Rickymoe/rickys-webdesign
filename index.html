@@ -98,6 +98,75 @@
     width:26px; height:26px;
     display:inline-block;
   }
+  .logo-mark--grid{
+    position:relative;
+    width:32px; height:32px;
+    display:grid; grid-template-columns:repeat(4,1fr); grid-template-rows:repeat(4,1fr);
+    gap:2px;
+    perspective:220px;
+  }
+  .logo-mark--grid .sq{ position:relative; border-radius:1.5px; overflow:hidden; }
+  .logo-mark--grid .sq::after{
+    content:''; position:absolute; inset:0;
+    background:var(--bg); opacity:0;
+    animation:lm-twinkle 4.6s ease-in-out infinite;
+  }
+  /* Individuelt fargesettbare — endre bakgrunnsfargen på hver sq1-sq16 fritt.
+     Lånt fra X3 sin "fasetter avsløres av lys"-idé (spec-sweep i X3s style.css),
+     tilpasset til diskrete ruter: hver sq har egen animation-delay for
+     asynkront blink i stedet for X3s kontinuerlige sweep over én maskert flate.
+     Blinket er et lyst overlegg (::after, opacity) i stedet for filter:brightness(),
+     slik at mørke ruter (--ink) blinker like synlig som lyse ruter. */
+  .logo-mark--grid .sq1{ background:var(--accent); }
+  .logo-mark--grid .sq2{ background:var(--ink); }
+  .logo-mark--grid .sq3{ background:var(--accent); }
+  .logo-mark--grid .sq4{ background:var(--warm); }
+  .logo-mark--grid .sq5{ background:var(--ink); }
+  .logo-mark--grid .sq6{ background:var(--warm); }
+  .logo-mark--grid .sq7{ background:var(--ink); }
+  .logo-mark--grid .sq8{ background:var(--accent); }
+  .logo-mark--grid .sq9{ background:var(--warm); }
+  .logo-mark--grid .sq10{ background:var(--accent); }
+  .logo-mark--grid .sq11{ background:var(--warm); }
+  .logo-mark--grid .sq12{ background:var(--ink); }
+  .logo-mark--grid .sq13{ background:var(--accent); }
+  .logo-mark--grid .sq14{ background:var(--ink); }
+  .logo-mark--grid .sq15{ background:var(--accent); }
+  .logo-mark--grid .sq16{ background:var(--warm); }
+  .logo-mark--grid .sq1::after{ animation-delay:0s; }
+  .logo-mark--grid .sq2::after{ animation-delay:0.29s; }
+  .logo-mark--grid .sq3::after{ animation-delay:0.58s; }
+  .logo-mark--grid .sq4::after{ animation-delay:0.86s; }
+  .logo-mark--grid .sq5::after{ animation-delay:1.15s; }
+  .logo-mark--grid .sq6::after{ animation-delay:1.44s; }
+  .logo-mark--grid .sq7::after{ animation-delay:1.73s; }
+  .logo-mark--grid .sq8::after{ animation-delay:2.01s; }
+  .logo-mark--grid .sq9::after{ animation-delay:2.3s; }
+  .logo-mark--grid .sq10::after{ animation-delay:2.59s; }
+  .logo-mark--grid .sq11::after{ animation-delay:2.88s; }
+  .logo-mark--grid .sq12::after{ animation-delay:3.16s; }
+  .logo-mark--grid .sq13::after{ animation-delay:3.45s; }
+  .logo-mark--grid .sq14::after{ animation-delay:3.74s; }
+  .logo-mark--grid .sq15::after{ animation-delay:4.03s; }
+  .logo-mark--grid .sq16::after{ animation-delay:4.31s; }
+  @keyframes lm-twinkle{
+    0%, 100%{ opacity:0; }
+    50%{ opacity:0.55; }
+  }
+  .lm-plate{
+    position:absolute; top:50%; left:50%;
+    width:18px; height:18px; margin:-9px 0 0 -9px;
+    background:var(--ink); border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 2px 6px rgba(0,0,0,0.3);
+  }
+  .lm-plate span{
+    font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:10px; color:var(--accent); line-height:1;
+  }
+  @keyframes lm-spin-cw{
+    from{ transform:rotate(0deg); }
+    to{ transform:rotate(360deg); }
+  }
   .nav-links{
     display:flex; gap:32px;
     list-style:none; margin:0; padding:0;
@@ -348,10 +417,13 @@
 <header>
   <nav class="nav">
     <a href="#" class="logo">
-      <svg class="logo-mark" viewBox="0 0 40 40" aria-hidden="true">
-        <rect width="40" height="40" rx="11" fill="var(--accent)"/>
-        <text x="20" y="21" text-anchor="middle" dominant-baseline="central" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="23" fill="var(--ink)">R</text>
-      </svg>
+      <span class="logo-mark logo-mark--grid" aria-hidden="true">
+        <span class="sq sq1"></span><span class="sq sq2"></span><span class="sq sq3"></span><span class="sq sq4"></span>
+        <span class="sq sq5"></span><span class="sq sq6"></span><span class="sq sq7"></span><span class="sq sq8"></span>
+        <span class="sq sq9"></span><span class="sq sq10"></span><span class="sq sq11"></span><span class="sq sq12"></span>
+        <span class="sq sq13"></span><span class="sq sq14"></span><span class="sq sq15"></span><span class="sq sq16"></span>
+        <span class="lm-plate"><span>R</span></span>
+      </span>
       Rickys Webdesign
     </a>
     <ul class="nav-links nav-mobile-hide">
