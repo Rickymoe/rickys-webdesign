@@ -326,13 +326,13 @@
   .plan.featured{
     border-color:var(--accent);
     box-shadow:0 0 0 1px var(--accent), var(--shadow);
-    transform:translateY(-8px);
+    margin-top:-8px;
   }
   .plan.premium{
     border-color:var(--ink);
     box-shadow:0 0 0 1px var(--ink);
   }
-  @media (max-width:900px){ .plan.featured{ transform:none; } }
+  @media (max-width:900px){ .plan.featured{ margin-top:0; } }
   .plan-badge{
     position:absolute; top:-13px; left:28px;
     background:var(--accent); color:#fff;
@@ -518,8 +518,8 @@
       </div>
     </div>
 
-    <div class="plans reveal">
-      <div class="plan">
+    <div class="plans">
+      <div class="plan reveal" style="transition-delay:0s;">
         <div class="plan-name">01 — Liten</div>
         <div class="plan-title">Liten</div>
         <div class="plan-desc">For dere med stabilt innhold og sjeldne endringer.</div>
@@ -534,7 +534,7 @@
         <a href="#kontakt" class="btn btn-primary plan-select-btn" data-plan="Liten" data-price="599">Velg Liten</a>
       </div>
 
-      <div class="plan featured">
+      <div class="plan featured reveal" style="transition-delay:0.1s;">
         <div class="plan-badge">Mest valgt</div>
         <div class="plan-name">02 — Medium</div>
         <div class="plan-title">Medium</div>
@@ -551,7 +551,7 @@
         <a href="#kontakt" class="btn btn-primary plan-select-btn" data-plan="Medium" data-price="1499">Velg Medium</a>
       </div>
 
-      <div class="plan premium">
+      <div class="plan premium reveal" style="transition-delay:0.2s;">
         <div class="plan-name">03 — Stor</div>
         <div class="plan-title">Stor</div>
         <div class="plan-desc">For dere som ønsker siden fulgt tett opp.</div>
