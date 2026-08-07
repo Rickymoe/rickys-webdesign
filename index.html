@@ -244,6 +244,10 @@
     box-shadow:0 0 0 1px var(--accent), var(--shadow);
     transform:translateY(-8px);
   }
+  .plan.premium{
+    border-color:var(--ink);
+    box-shadow:0 0 0 1px var(--ink);
+  }
   @media (max-width:900px){ .plan.featured{ transform:none; } }
   .plan-badge{
     position:absolute; top:-13px; left:28px;
@@ -270,6 +274,8 @@
   }
   .plan-features li:first-child{ border-top:none; }
   .plan-features li svg{ flex-shrink:0; margin-top:3px; color:var(--accent); }
+  .plan-features li.optional{ color:var(--ink-faint); }
+  .plan-features li.optional svg{ color:var(--ink-faint); }
   .plan .btn{ text-align:center; }
   .plan:not(.featured) .btn-primary{ background:var(--ink); }
   .plan:not(.featured) .btn-primary:hover{ background:var(--accent); }
@@ -433,12 +439,13 @@
         <div class="plan-name">01 — Liten</div>
         <div class="plan-title">Liten</div>
         <div class="plan-desc">For dere med stabilt innhold og sjeldne endringer.</div>
-        <div class="plan-price">799 <span>kr / mnd</span></div>
+        <div class="plan-price">599 <span>kr / mnd</span></div>
         <div class="plan-price-note">Ingen bindingstid</div>
         <ul class="plan-features">
           <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> Inntil 2 endringer per måned</li>
           <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> Tekst-, bilde- og kontaktoppdateringer</li>
           <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> Svar innen 2–3 virkedager</li>
+          <li class="optional"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="4"/></svg> Kontaktskjema (+100 kr/mnd, avtales separat)</li>
         </ul>
         <a href="#kontakt" class="btn btn-primary">Velg Liten</a>
       </div>
@@ -454,12 +461,13 @@
           <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> Inntil 5 endringer per måned</li>
           <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> Mindre design-justeringer og nye seksjoner</li>
           <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> Svar innen 1–2 virkedager</li>
-          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> Årlig gjennomgang så dere er lette å finne på Google</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> Årlig gjennomgang av design og funksjonalitet</li>
+          <li class="optional"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="4"/></svg> Kontaktskjema (+100 kr/mnd, avtales separat)</li>
         </ul>
         <a href="#kontakt" class="btn btn-primary">Velg Medium</a>
       </div>
 
-      <div class="plan">
+      <div class="plan premium">
         <div class="plan-name">03 — Stor</div>
         <div class="plan-title">Stor</div>
         <div class="plan-desc">For dere som ønsker siden fulgt tett opp.</div>
