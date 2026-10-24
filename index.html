@@ -579,7 +579,8 @@
       heroBase: 1, restBase: 0.5, heroFade: 140,
       inkAlpha: 0.064, darkAlpha: 0.06,
       calmText: 0.98, calmBlock: 0.99, feather: 190,
-      glowRadius: 170, glowAlpha: 0.75, glowInCalm: 0.3
+      glowRadius: 170, glowAlpha: 0.75, glowInCalm: 0.3,
+      waveSpeed: 1100, waveLead: 36, waveTail: 120, waveSlant: 0.12, waveAlpha: 0.8, waveInCalm: 0.6, wavePop: 4, waveDelay: 250
     };
 
     const cv = document.getElementById('grid-field');
@@ -587,6 +588,7 @@
     const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
     let dpr = 1, vw = 0, vh = 0, cols = 0, rows = 0, base, calm, dark, docH = 0;
     let tx = 0, ty = 0, gx = 0, gy = 0, gs = 0, lastMove = -1e9, dirty = true;
+    let waveStart = null, waveY = 0, waveOn = false;
 
     function collect(){
       const sy = scrollY, out = [];
@@ -651,6 +653,7 @@
       const c = T.cell, sy = scrollY;
       const y0 = Math.max(0, Math.floor(sy / c)), y1 = Math.min(rows - 1, Math.ceil((sy + vh) / c));
       const gr = T.glowRadius, gr2 = gr * gr, glowOn = gs > 0.01;
+      const wl = T.waveLead, wt = T.waveTail;
       for(let y = y0; y <= y1; y++){
         const py = y * c - sy + 3;
         for(let x = 0; x < cols; x++){
@@ -664,7 +667,12 @@
               ga = k * k * T.glowAlpha * gs * (1 - (1 - T.glowInCalm) * calm[i]);
             }
           }
-          if(a < 0.004 && ga < 0.004) continue;
+          let w = 0;
+          if(waveOn){
+            const u = y * c + c / 2 + px * T.waveSlant - waveY;
+            w = u > 0 ? Math.exp(-(u / wl) * (u / wl)) : Math.exp(u / wt);
+          }
+          if(a < 0.004 && ga < 0.004 && w < 0.02) continue;
           if(a >= 0.004){
             ctx.fillStyle = 'rgba(' + (dark[i] ? T.goldOnDark : T.ink) + ',' + a + ')';
             ctx.beginPath(); ctx.roundRect(px, py, T.size, T.size, T.radius); ctx.fill();
@@ -672,6 +680,11 @@
           if(ga >= 0.004){
             ctx.fillStyle = 'rgba(' + (dark[i] ? T.goldOnDark : T.gold) + ',' + ga + ')';
             ctx.beginPath(); ctx.roundRect(px, py, T.size, T.size, T.radius); ctx.fill();
+          }
+          if(w >= 0.02){
+            const pop = T.wavePop * w, wa = w * T.waveAlpha * (1 - (1 - T.waveInCalm) * calm[i]);
+            ctx.fillStyle = 'rgba(' + (dark[i] ? T.goldOnDark : T.gold) + ',' + wa + ')';
+            ctx.beginPath(); ctx.roundRect(px - pop / 2, py - pop / 2, T.size + pop, T.size + pop, T.radius + pop / 4); ctx.fill();
           }
         }
       }
@@ -683,7 +696,12 @@
         const active = now - lastMove < 2500;
         gs += ((active ? 1 : 0) - gs) * 0.06;
         gx += (tx - gx) * 0.14; gy += (ty - gy) * 0.14;
-        dirty = true;
+        if(gs > 0.005 || Math.abs(tx - gx) > 0.5 || Math.abs(ty - gy) > 0.5) dirty = true;
+        if(waveStart !== null && now >= waveStart){
+          waveY = -T.waveTail + (now - waveStart) / 1000 * T.waveSpeed;
+          waveOn = waveY < docH + T.waveLead * 3;
+          dirty = true;
+        }
       }
       if(dirty && !document.hidden) draw(now);
       requestAnimationFrame(frame);
@@ -694,7 +712,7 @@
     addEventListener('resize', layout);
     if('ResizeObserver' in window) new ResizeObserver(() => { if(document.documentElement.scrollHeight !== docH) layout(); }).observe(document.body);
     if(document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
-    addEventListener('load', layout);
+    addEventListener('load', () => { layout(); if(!still) waveStart = performance.now() + T.waveDelay; });
     layout();
     requestAnimationFrame(frame);
   })();
