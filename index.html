@@ -383,10 +383,10 @@
   }
   .footer-row{ position:relative; z-index:1; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; }
 
-  #grid-field{ position:fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:40; }
+  #grid-field{ position:fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:40; opacity:0; transition:opacity 0.6s ease; }
 
-  .reveal{ opacity:0; transform:translateY(14px); transition:opacity 0.6s ease, transform 0.6s ease; }
-  .reveal.in{ opacity:1; transform:none; }
+  .reveal{ opacity:0; transition:opacity 0.6s ease; }
+  .reveal.in{ opacity:1; }
 </style>
 <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "3b2830d8c1b74ed68dee031783103adc"}'></script><!-- End Cloudflare Web Analytics -->
 </head>
@@ -562,12 +562,27 @@
   (function(){
     const els = document.querySelectorAll('.reveal');
     if(!('IntersectionObserver' in window)){ els.forEach(el => el.classList.add('in')); return; }
+    let settled = false;
+    function showNow(el){
+      el.style.transition = 'none';
+      el.classList.add('in');
+      el.offsetHeight;
+      el.style.transition = '';
+    }
     const io = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if(entry.isIntersecting){ entry.target.classList.add('in'); io.unobserve(entry.target); }
+        if(!entry.isIntersecting) return;
+        if(settled) entry.target.classList.add('in'); else showNow(entry.target);
+        io.unobserve(entry.target);
       });
     }, { threshold: 0.15 });
-    els.forEach(el => io.observe(el));
+    els.forEach(el => {
+      if(el.getBoundingClientRect().top < innerHeight){ showNow(el); } else { io.observe(el); }
+    });
+    addEventListener('load', () => {
+      els.forEach(el => { if(!el.classList.contains('in') && el.getBoundingClientRect().top < innerHeight) showNow(el); });
+      setTimeout(() => { settled = true; }, 600);
+    });
   })();
 </script>
 
@@ -580,7 +595,7 @@
       inkAlpha: 0.064, darkAlpha: 0.06,
       calmText: 0.98, calmBlock: 0.99, feather: 190,
       glowRadius: 170, glowAlpha: 0.75, glowInCalm: 0.3,
-      waveSpeed: 400, waveLead: 36, waveTail: 120, waveSlant: 0.12, waveAlpha: 0.8, waveInCalm: 0.6, wavePop: 4, waveDelay: 250
+      waveSpeed: 400, waveLead: 36, waveTail: 120, waveSlant: 0.12, waveAlpha: 0.8, waveInCalm: 0.2, wavePop: 4, waveDelay: 250
     };
 
     const cv = document.getElementById('grid-field');
@@ -588,7 +603,7 @@
     const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
     let dpr = 1, vw = 0, vh = 0, cols = 0, rows = 0, base, calm, dark, docH = 0;
     let tx = 0, ty = 0, gx = 0, gy = 0, gs = 0, lastMove = -1e9, dirty = true;
-    let waveStart = null, waveX = 0, waveOn = false;
+    let waveStart = null, waveX = 0, waveOn = false, ready = false;
 
     function collect(){
       const sy = scrollY, out = [];
@@ -609,7 +624,7 @@
     function layout(){
       dpr = Math.min(devicePixelRatio || 1, 2);
       vw = innerWidth; vh = innerHeight;
-      cv.width = vw * dpr; cv.height = vh * dpr;
+      if(cv.width !== vw * dpr || cv.height !== vh * dpr){ cv.width = vw * dpr; cv.height = vh * dpr; }
       docH = document.documentElement.scrollHeight;
       cols = Math.ceil(vw / T.cell) + 1; rows = Math.ceil(docH / T.cell) + 1;
       base = new Float32Array(cols * rows); calm = new Float32Array(cols * rows); dark = new Uint8Array(cols * rows);
@@ -703,7 +718,7 @@
           dirty = true;
         }
       }
-      if(dirty && !document.hidden) draw(now);
+      if(ready && dirty && !document.hidden) draw(now);
       requestAnimationFrame(frame);
     }
 
@@ -711,9 +726,18 @@
     addEventListener('scroll', () => { dirty = true; }, { passive: true });
     addEventListener('resize', layout);
     if('ResizeObserver' in window) new ResizeObserver(() => { if(document.documentElement.scrollHeight !== docH) layout(); }).observe(document.body);
-    if(document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
-    addEventListener('load', () => { layout(); if(!still) waveStart = performance.now() + T.waveDelay; });
-    layout();
+    let fontsOk = !(document.fonts && document.fonts.ready), loaded = document.readyState === 'complete';
+    function tryReady(){
+      if(ready || !fontsOk || !loaded) return;
+      ready = true;
+      layout();
+      cv.style.opacity = 1;
+      if(!still) waveStart = performance.now() + T.waveDelay;
+    }
+    if(!fontsOk) document.fonts.ready.then(() => { fontsOk = true; tryReady(); });
+    addEventListener('load', () => { loaded = true; tryReady(); });
+    setTimeout(() => { fontsOk = loaded = true; tryReady(); }, 2500);
+    tryReady();
     requestAnimationFrame(frame);
   })();
 </script>
