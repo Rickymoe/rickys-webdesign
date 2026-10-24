@@ -10,7 +10,7 @@
 <link rel="apple-touch-icon" sizes="180x180" href="Bilder/favicon-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#F4F2E6;
@@ -89,66 +89,23 @@
     position:relative;
   }
   .logo{
-    font-family:'Space Grotesk', sans-serif;
-    font-weight:700;
-    font-size:22px;
-    display:flex; align-items:center; gap:8px;
-    text-decoration:none;
+    position:relative; display:inline-block;
+    padding:0 44px; margin-left:-44px;
+    line-height:1; white-space:nowrap; text-decoration:none;
+    font-family:'Syne', sans-serif; font-weight:700; font-size:23px; letter-spacing:-0.01em;
+    color:var(--ink);
   }
-  .logo-mark{
-    width:26px; height:26px;
-    display:inline-block;
+  .logo-text{ position:relative; z-index:1; display:block; }
+  .logo-band{
+    position:absolute; left:0; right:0; top:50%; height:66px; transform:translateY(-50%);
+    display:grid; grid-template-columns:repeat(auto-fill,10px); grid-auto-rows:10px; gap:4px;
+    justify-content:center; align-content:start; overflow:hidden; pointer-events:none;
+    -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 28px,#000 38px,transparent 66px),linear-gradient(to right,transparent 0,#000 5%,#000 95%,transparent 100%);
+    mask-image:linear-gradient(to bottom,transparent 0,#000 28px,#000 38px,transparent 66px),linear-gradient(to right,transparent 0,#000 5%,#000 95%,transparent 100%);
+    -webkit-mask-composite:source-in; mask-composite:intersect;
   }
-  .logo-mark--grid{
-    position:relative;
-    width:44px; height:44px;
-    display:grid; grid-template-columns:repeat(4,1fr); grid-template-rows:repeat(4,1fr);
-    gap:3px;
-    perspective:220px;
-  }
-  .logo-mark--grid .sq{ position:relative; border-radius:2px; overflow:hidden; }
-  /* Individuelt fargesettbare — endre bakgrunnsfargen på hver sq1-sq16 fritt.
-     Lånt fra X3 sin "fasetter avsløres av lys"-idé (spec-sweep i X3s style.css),
-     tilpasset til diskrete ruter: hver sq har egen animation-delay for
-     asynkront blink i stedet for X3s kontinuerlige sweep over én maskert flate.
-     Blinket er et lyst overlegg (::after, opacity) i stedet for filter:brightness(),
-     slik at mørke ruter (--ink) blinker like synlig som lyse ruter. */
-  .logo-mark--grid .sq1{ background:var(--accent); }
-  .logo-mark--grid .sq2{ background:var(--ink); }
-  .logo-mark--grid .sq3{ background:var(--accent); }
-  .logo-mark--grid .sq4{ background:var(--warm); }
-  .logo-mark--grid .sq5{ background:var(--ink); }
-  .logo-mark--grid .sq6{ background:var(--warm); }
-  .logo-mark--grid .sq7{ background:var(--ink); }
-  .logo-mark--grid .sq8{ background:var(--accent); }
-  .logo-mark--grid .sq9{ background:var(--warm); }
-  .logo-mark--grid .sq10{ background:var(--accent); }
-  .logo-mark--grid .sq11{ background:var(--warm); }
-  .logo-mark--grid .sq12{ background:var(--ink); }
-  .logo-mark--grid .sq13{ background:var(--accent); }
-  .logo-mark--grid .sq14{ background:var(--ink); }
-  .logo-mark--grid .sq15{ background:var(--accent); }
-  .logo-mark--grid .sq16{ background:var(--warm); }
-  .logo-mark--grid .sq1::after{ animation-delay:0s; }
-  .logo-mark--grid .sq2::after{ animation-delay:0.29s; }
-  .logo-mark--grid .sq3::after{ animation-delay:0.58s; }
-  .logo-mark--grid .sq4::after{ animation-delay:0.86s; }
-  .logo-mark--grid .sq5::after{ animation-delay:1.15s; }
-  .logo-mark--grid .sq6::after{ animation-delay:1.44s; }
-  .logo-mark--grid .sq7::after{ animation-delay:1.73s; }
-  .logo-mark--grid .sq8::after{ animation-delay:2.01s; }
-  .logo-mark--grid .sq9::after{ animation-delay:2.3s; }
-  .logo-mark--grid .sq10::after{ animation-delay:2.59s; }
-  .logo-mark--grid .sq11::after{ animation-delay:2.88s; }
-  .logo-mark--grid .sq12::after{ animation-delay:3.16s; }
-  .logo-mark--grid .sq13::after{ animation-delay:3.45s; }
-  .logo-mark--grid .sq14::after{ animation-delay:3.74s; }
-  .logo-mark--grid .sq15::after{ animation-delay:4.03s; }
-  .logo-mark--grid .sq16::after{ animation-delay:4.31s; }
-  @keyframes lm-twinkle{
-    0%, 100%{ opacity:0; }
-    50%{ opacity:0.55; }
-  }
+  .logo-band i{ display:block; border-radius:15%; animation:logo-tw 4s ease-in-out infinite; }
+  @keyframes logo-tw{ 0%,100%{ opacity:var(--o); } 50%{ opacity:calc(var(--o) * 0.35); } }
   .nav-links{
     display:flex; gap:32px;
     list-style:none; margin:0; padding:0;
@@ -386,15 +343,7 @@
 
 <header>
   <nav class="nav">
-    <a href="#" class="logo">
-      <span class="logo-mark logo-mark--grid" aria-hidden="true">
-        <span class="sq sq1"></span><span class="sq sq2"></span><span class="sq sq3"></span><span class="sq sq4"></span>
-        <span class="sq sq5"></span><span class="sq sq6"></span><span class="sq sq7"></span><span class="sq sq8"></span>
-        <span class="sq sq9"></span><span class="sq sq10"></span><span class="sq sq11"></span><span class="sq sq12"></span>
-        <span class="sq sq13"></span><span class="sq sq14"></span><span class="sq sq15"></span><span class="sq sq16"></span>
-      </span>
-      Webdesign by Ricky
-    </a>
+    <a href="#" class="logo"><span class="logo-text">Webdesign by Ricky</span><span class="logo-band" aria-hidden="true"></span></a>
     <ul class="nav-links nav-mobile-hide">
       <li><a href="#om">Om oss</a></li>
       <li><a href="#tjenester">Tjenester</a></li>
@@ -794,6 +743,27 @@
     addEventListener('resize', () => { sync(); });
     if(document.fonts && document.fonts.ready) document.fonts.ready.then(() => { measure(); sync(); });
     measure(); sync();
+  })();
+</script>
+
+<script>
+  (function(){
+    const band = document.querySelector('.logo-band');
+    if(!band) return;
+    let seed = 13;
+    const rand = () => { seed |= 0; seed = (seed + 0x6D2B79F5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+    const pal = ['#BD8B3B', '#C9CFA8', '#BD8B3B', '#A9B08A'];
+    const frag = document.createDocumentFragment();
+    for(let i = 0; i < 90 * 5; i++){
+      const q = document.createElement('i');
+      q.style.background = pal[Math.floor(rand() * pal.length)];
+      const o = 0.38 * (0.3 + 0.7 * (0.25 + rand() * 0.75));
+      q.style.setProperty('--o', o.toFixed(3));
+      q.style.opacity = o.toFixed(3);
+      q.style.animationDelay = (-rand() * 4).toFixed(2) + 's';
+      frag.appendChild(q);
+    }
+    band.appendChild(frag);
   })();
 </script>
 
