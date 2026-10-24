@@ -86,6 +86,7 @@
     display:flex; align-items:center; justify-content:space-between;
     padding:18px 28px;
     max-width:1140px; margin:0 auto;
+    position:relative;
   }
   .logo{
     font-family:'Space Grotesk', sans-serif;
@@ -100,17 +101,12 @@
   }
   .logo-mark--grid{
     position:relative;
-    width:32px; height:32px;
+    width:44px; height:44px;
     display:grid; grid-template-columns:repeat(4,1fr); grid-template-rows:repeat(4,1fr);
-    gap:2px;
+    gap:3px;
     perspective:220px;
   }
-  .logo-mark--grid .sq{ position:relative; border-radius:1.5px; overflow:hidden; }
-  .logo-mark--grid .sq::after{
-    content:''; position:absolute; inset:0;
-    background:var(--bg); opacity:0;
-    animation:lm-twinkle 4.6s ease-in-out infinite;
-  }
+  .logo-mark--grid .sq{ position:relative; border-radius:2px; overflow:hidden; }
   /* Individuelt fargesettbare — endre bakgrunnsfargen på hver sq1-sq16 fritt.
      Lånt fra X3 sin "fasetter avsløres av lys"-idé (spec-sweep i X3s style.css),
      tilpasset til diskrete ruter: hver sq har egen animation-delay for
@@ -155,13 +151,13 @@
   }
   .lm-plate{
     position:absolute; top:50%; left:50%;
-    width:18px; height:18px; margin:-9px 0 0 -9px;
+    width:25px; height:25px; margin:-12.5px 0 0 -12.5px; z-index:2;
     background:var(--ink); border-radius:50%;
     display:flex; align-items:center; justify-content:center;
     box-shadow:0 2px 6px rgba(0,0,0,0.3);
   }
   .lm-plate span{
-    font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:10px; color:var(--accent); line-height:1;
+    font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:14px; color:var(--accent); line-height:1;
   }
   @keyframes lm-spin-cw{
     from{ transform:rotate(0deg); }
@@ -174,16 +170,24 @@
     font-size:15px;
   }
   .nav-links a{ text-decoration:none; color:var(--ink-soft); }
-  .nav-links a:hover{ color:var(--ink); }
+  .nav-links a:hover, .nav-links a.is-active{ color:var(--ink); }
+  .nav-marker{
+    position:absolute; left:0; top:0; width:8px; height:8px; border-radius:1.5px;
+    background:var(--accent); opacity:0; pointer-events:none;
+    transition:transform 0.45s cubic-bezier(0.2,0.8,0.2,1), opacity 0.25s ease;
+  }
+  @media (max-width:760px){ .nav-marker{ display:none; } }
   .nav-cta{
     font-family:'Space Grotesk', sans-serif;
     font-size:14px; font-weight:600;
-    background:var(--ink); color:var(--bg);
-    padding:10px 18px; border-radius:8px;
+    background:transparent; color:var(--ink);
+    border:1px solid var(--ink-faint);
+    padding:9px 18px; border-radius:8px;
     text-decoration:none;
     white-space:nowrap;
+    transition:background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
   }
-  .nav-cta:hover{ background:var(--accent); }
+  .nav-cta:hover{ background:var(--accent); border-color:var(--accent); color:#fff; }
   .nav-mobile-hide{ display:flex; }
   @media (max-width:760px){
     .nav-mobile-hide{ display:none; }
@@ -383,7 +387,7 @@
   }
   .footer-row{ position:relative; z-index:1; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; }
 
-  #grid-field{ position:fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:40; opacity:0; transition:opacity 0.6s ease; }
+  #grid-field{ position:fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:60; opacity:0; transition:opacity 0.6s ease; }
 
   .reveal{ opacity:0; transition:opacity 0.6s ease; }
   .reveal.in{ opacity:1; }
@@ -411,6 +415,7 @@
       <li><a href="#tjenester">Tjenester</a></li>
       <li><a href="#abonnement">Priser</a></li>
     </ul>
+    <span class="nav-marker" aria-hidden="true"></span>
     <a href="#kontakt" class="nav-cta">Ta kontakt</a>
   </nav>
 </header>
@@ -595,7 +600,8 @@
       inkAlpha: 0.064, darkAlpha: 0.06,
       calmText: 0.98, calmBlock: 0.99, feather: 190,
       glowRadius: 170, glowAlpha: 0.75, glowInCalm: 0.3,
-      waveSpeed: 400, waveLead: 36, waveTail: 120, waveSlant: 0.12, waveAlpha: 0.8, waveInCalm: 0.2, wavePop: 4, waveDelay: 250
+      waveSpeed: 400, waveLead: 36, waveTail: 120, waveSlant: 0.12, waveAlpha: 0.8, waveInCalm: 0.2, wavePop: 4, waveDelay: 250,
+      headerBoost: 1.5, headerFeather: 80
     };
 
     const cv = document.getElementById('grid-field');
@@ -604,6 +610,7 @@
     let dpr = 1, vw = 0, vh = 0, cols = 0, rows = 0, base, calm, dark, docH = 0;
     let tx = 0, ty = 0, gx = 0, gy = 0, gs = 0, lastMove = -1e9, dirty = true;
     let waveStart = null, waveX = 0, waveOn = false, ready = false;
+    let hh = 0, hrows = 0, hcalm;
 
     function collect(){
       const sy = scrollY, out = [];
@@ -619,6 +626,23 @@
         if(b.width > 0 && b.height > 0) out.push([b.left, b.top + sy, b.right, b.bottom + sy, el.matches('.plan,.service-card') ? T.calmBlock : T.calmText]);
       });
       return out;
+    }
+
+    function stamp(arr, nrows, l, t, r, b, w, f){
+      const c = T.cell;
+      const x0 = Math.max(0, Math.floor((l - f) / c)), x1 = Math.min(cols - 1, Math.ceil((r + f) / c));
+      const y0 = Math.max(0, Math.floor((t - f) / c)), y1 = Math.min(nrows - 1, Math.ceil((b + f) / c));
+      for(let y = y0; y <= y1; y++){
+        const cy = y * c + c / 2, dy = Math.max(t - cy, 0, cy - b);
+        for(let x = x0; x <= x1; x++){
+          const cx = x * c + c / 2, dx = Math.max(l - cx, 0, cx - r);
+          const d = Math.hypot(dx, dy);
+          if(d >= f) continue;
+          const k = 1 - d / f, v = w * k * k * k * (k * (6 * k - 15) + 10);
+          const i = y * cols + x;
+          if(v > arr[i]) arr[i] = v;
+        }
+      }
     }
 
     function layout(){
@@ -643,21 +667,16 @@
         for(let x = 0; x < cols; x++){ base[y * cols + x] = bv; dark[y * cols + x] = isDark ? 1 : 0; }
       }
 
-      const f = T.feather, c = T.cell;
-      collect().forEach(([l, t, r, b, w]) => {
-        const x0 = Math.max(0, Math.floor((l - f) / c)), x1 = Math.min(cols - 1, Math.ceil((r + f) / c));
-        const y0 = Math.max(0, Math.floor((t - f) / c)), y1 = Math.min(rows - 1, Math.ceil((b + f) / c));
-        for(let y = y0; y <= y1; y++){
-          const cy = y * c + c / 2, dy = Math.max(t - cy, 0, cy - b);
-          for(let x = x0; x <= x1; x++){
-            const cx = x * c + c / 2, dx = Math.max(l - cx, 0, cx - r);
-            const d = Math.hypot(dx, dy);
-            if(d >= f) continue;
-            const k = 1 - d / f, v = w * k * k * k * (k * (6 * k - 15) + 10);
-            const i = y * cols + x;
-            if(v > calm[i]) calm[i] = v;
-          }
-        }
+      collect().forEach(([l, t, r, b, w]) => stamp(calm, rows, l, t, r, b, w, T.feather));
+
+      const hd = document.querySelector('header').getBoundingClientRect();
+      hh = hd.height; hrows = Math.ceil(hh / T.cell);
+      hcalm = new Float32Array(hrows * cols);
+      [['.logo', 0, 0.92], ['.nav-links', 12, 0.92], ['.nav-cta', 0, 0.95]].forEach(([sel, pad, w]) => {
+        const el = document.querySelector(sel);
+        if(!el) return;
+        const b = el.getBoundingClientRect();
+        if(b.width > 0) stamp(hcalm, hrows, b.left - pad, b.top - hd.top - pad, b.right + pad, b.bottom - hd.top + pad, w, T.headerFeather);
       });
       dirty = true;
     }
@@ -666,41 +685,54 @@
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, vw, vh);
       const c = T.cell, sy = scrollY;
-      const y0 = Math.max(0, Math.floor(sy / c)), y1 = Math.min(rows - 1, Math.ceil((sy + vh) / c));
       const gr = T.glowRadius, gr2 = gr * gr, glowOn = gs > 0.01;
       const wl = T.waveLead, wt = T.waveTail;
+
+      function cell(px, py, a, cl, isDark){
+        let ga = 0, w = 0;
+        if(glowOn){
+          const dx = px + 4 - gx, dy = py + 4 - gy, d2 = dx * dx + dy * dy;
+          if(d2 < gr2){
+            const k = 1 - Math.sqrt(d2) / gr;
+            ga = k * k * T.glowAlpha * gs * (1 - (1 - T.glowInCalm) * cl);
+          }
+        }
+        if(waveOn){
+          const u = px + py * T.waveSlant - waveX;
+          w = u > 0 ? Math.exp(-(u / wl) * (u / wl)) : Math.exp(u / wt);
+        }
+        if(a < 0.004 && ga < 0.004 && w < 0.02) return;
+        const col = isDark ? T.goldOnDark : null;
+        if(a >= 0.004){
+          ctx.fillStyle = 'rgba(' + (col || T.ink) + ',' + a + ')';
+          ctx.beginPath(); ctx.roundRect(px, py, T.size, T.size, T.radius); ctx.fill();
+        }
+        if(ga >= 0.004){
+          ctx.fillStyle = 'rgba(' + (col || T.gold) + ',' + ga + ')';
+          ctx.beginPath(); ctx.roundRect(px, py, T.size, T.size, T.radius); ctx.fill();
+        }
+        if(w >= 0.02){
+          const pop = T.wavePop * w, wa = w * T.waveAlpha * (1 - (1 - T.waveInCalm) * cl);
+          ctx.fillStyle = 'rgba(' + (col || T.gold) + ',' + wa + ')';
+          ctx.beginPath(); ctx.roundRect(px - pop / 2, py - pop / 2, T.size + pop, T.size + pop, T.radius + pop / 4); ctx.fill();
+        }
+      }
+
+      const y0 = Math.max(0, Math.floor(sy / c)), y1 = Math.min(rows - 1, Math.ceil((sy + vh) / c));
       for(let y = y0; y <= y1; y++){
         const py = y * c - sy + 3;
+        if(py < hh) continue;
         for(let x = 0; x < cols; x++){
-          const i = y * cols + x, px = x * c + 3;
-          const I = base[i] * (1 - calm[i]);
-          let a = I * (dark[i] ? T.darkAlpha : T.inkAlpha), ga = 0;
-          if(glowOn){
-            const dx = px + 4 - gx, dy = py + 4 - gy, d2 = dx * dx + dy * dy;
-            if(d2 < gr2){
-              const k = 1 - Math.sqrt(d2) / gr;
-              ga = k * k * T.glowAlpha * gs * (1 - (1 - T.glowInCalm) * calm[i]);
-            }
-          }
-          let w = 0;
-          if(waveOn){
-            const u = px + py * T.waveSlant - waveX;
-            w = u > 0 ? Math.exp(-(u / wl) * (u / wl)) : Math.exp(u / wt);
-          }
-          if(a < 0.004 && ga < 0.004 && w < 0.02) continue;
-          if(a >= 0.004){
-            ctx.fillStyle = 'rgba(' + (dark[i] ? T.goldOnDark : T.ink) + ',' + a + ')';
-            ctx.beginPath(); ctx.roundRect(px, py, T.size, T.size, T.radius); ctx.fill();
-          }
-          if(ga >= 0.004){
-            ctx.fillStyle = 'rgba(' + (dark[i] ? T.goldOnDark : T.gold) + ',' + ga + ')';
-            ctx.beginPath(); ctx.roundRect(px, py, T.size, T.size, T.radius); ctx.fill();
-          }
-          if(w >= 0.02){
-            const pop = T.wavePop * w, wa = w * T.waveAlpha * (1 - (1 - T.waveInCalm) * calm[i]);
-            ctx.fillStyle = 'rgba(' + (dark[i] ? T.goldOnDark : T.gold) + ',' + wa + ')';
-            ctx.beginPath(); ctx.roundRect(px - pop / 2, py - pop / 2, T.size + pop, T.size + pop, T.radius + pop / 4); ctx.fill();
-          }
+          const i = y * cols + x;
+          cell(x * c + 3, py, base[i] * (1 - calm[i]) * (dark[i] ? T.darkAlpha : T.inkAlpha), calm[i], dark[i]);
+        }
+      }
+      for(let y = 0; y < hrows; y++){
+        const py = y * c + 3;
+        if(py + T.size > hh) break;
+        for(let x = 0; x < cols; x++){
+          const i = y * cols + x;
+          cell(x * c + 3, py, (1 - hcalm[i]) * T.inkAlpha * T.headerBoost, hcalm[i], 0);
         }
       }
       dirty = false;
@@ -739,6 +771,42 @@
     setTimeout(() => { fontsOk = loaded = true; tryReady(); }, 2500);
     tryReady();
     requestAnimationFrame(frame);
+  })();
+</script>
+
+<script>
+  (function(){
+    const nav = document.querySelector('.nav'), marker = document.querySelector('.nav-marker');
+    const links = [...document.querySelectorAll('.nav-links a')];
+    if(!nav || !marker || !links.length) return;
+    const secs = links.map(a => document.querySelector(a.getAttribute('href')));
+    let active = null, hover = null;
+
+    function place(a){
+      const n = nav.getBoundingClientRect(), r = a.getBoundingClientRect();
+      marker.style.transform = 'translate(' + (r.left - n.left + r.width / 2 - 4) + 'px,' + (r.bottom - n.top + 7) + 'px)';
+    }
+    function sync(){
+      const target = hover || active;
+      links.forEach(a => a.classList.toggle('is-active', a === active));
+      if(target){ place(target); marker.style.opacity = 1; } else { marker.style.opacity = 0; }
+    }
+    function measure(){
+      const probe = innerHeight * 0.35;
+      let next = null;
+      secs.forEach((s, i) => { if(s){ const b = s.getBoundingClientRect(); if(b.top <= probe && b.bottom > probe) next = links[i]; } });
+      if(next !== active){ active = next; sync(); }
+    }
+    links.forEach(a => {
+      a.addEventListener('mouseenter', () => { hover = a; sync(); });
+      a.addEventListener('focus', () => { hover = a; sync(); });
+      a.addEventListener('mouseleave', () => { hover = null; sync(); });
+      a.addEventListener('blur', () => { hover = null; sync(); });
+    });
+    addEventListener('scroll', measure, { passive: true });
+    addEventListener('resize', () => { sync(); });
+    if(document.fonts && document.fonts.ready) document.fonts.ready.then(() => { measure(); sync(); });
+    measure(); sync();
   })();
 </script>
 
