@@ -559,8 +559,7 @@
       glowRadius: 170, glowAlpha: 0.75, glowInCalm: 0.3,
       waveSpeed: 400, waveLead: 36, waveTail: 120, waveSlant: 0.12, waveAlpha: 0.8, waveInCalm: 0.2, wavePop: 4, waveDelay: 250,
       headerBoost: 1.5, headerFeather: 80,
-      contactFade: 140, riseSpeed: 220, riseUp: 150,
-      frameAlpha: 0.3
+      contactFade: 140, riseSpeed: 220, riseUp: 150
     };
 
     const cv = document.getElementById('grid-field');
@@ -650,7 +649,7 @@
       const gr = T.glowRadius, gr2 = gr * gr, glowOn = gs > 0.01;
       const wl = T.waveLead, wt = T.waveTail;
 
-      function cell(px, py, a, cl, dy, fr){
+      function cell(px, py, a, cl, dy){
         let ga = 0, w = 0;
         if(glowOn){
           const dx = px + 4 - gx, dy = py + 4 - gy, d2 = dx * dx + dy * dy;
@@ -669,13 +668,9 @@
           const w2 = (u > 0 ? Math.exp(-(u / wl) * (u / wl)) : Math.exp(u / wt)) * (1 - k * k * (3 - 2 * k));
           if(w2 > w) w = w2;
         }
-        if(a < 0.004 && ga < 0.004 && w < 0.02 && !fr) return;
+        if(a < 0.004 && ga < 0.004 && w < 0.02) return;
         if(a >= 0.004){
           ctx.fillStyle = 'rgba(' + T.ink + ',' + a + ')';
-          ctx.beginPath(); ctx.roundRect(px, py, T.size, T.size, T.radius); ctx.fill();
-        }
-        if(fr){
-          ctx.fillStyle = 'rgba(' + T.gold + ',' + T.frameAlpha + ')';
           ctx.beginPath(); ctx.roundRect(px, py, T.size, T.size, T.radius); ctx.fill();
         }
         if(ga >= 0.004){
@@ -689,14 +684,13 @@
         }
       }
 
-      const lastX = Math.floor((vw - 3 - T.size) / c), lastY = Math.floor((docH - 3 - T.size) / c);
       const y0 = Math.max(0, Math.floor(sy / c)), y1 = Math.min(rows - 1, Math.ceil((sy + vh) / c));
       for(let y = y0; y <= y1; y++){
         const py = y * c - sy + 3;
         if(py < hh) continue;
         for(let x = 0; x < cols; x++){
           const i = y * cols + x;
-          cell(x * c + 3, py, base[i] * (1 - calm[i]) * T.inkAlpha, calm[i], y * c + 3, x === 0 || x === lastX || y === lastY);
+          cell(x * c + 3, py, base[i] * (1 - calm[i]) * T.inkAlpha, calm[i], y * c + 3);
         }
       }
       for(let y = 0; y < hrows; y++){
@@ -704,7 +698,7 @@
         if(py + T.size > hh) break;
         for(let x = 0; x < cols; x++){
           const i = y * cols + x;
-          cell(x * c + 3, py, (1 - hcalm[i]) * T.inkAlpha * T.headerBoost, hcalm[i], undefined, x === 0 || x === lastX || y === 0);
+          cell(x * c + 3, py, (1 - hcalm[i]) * T.inkAlpha * T.headerBoost, hcalm[i]);
         }
       }
       dirty = false;
