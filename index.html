@@ -524,13 +524,13 @@
         <div class="plan-name">01 — Liten</div>
         <div class="plan-title">Liten</div>
         <div class="plan-desc">For dere med stabilt innhold og sjeldne endringer.</div>
-        <div class="plan-price">599 <span>kr / mnd</span></div>
+        <div class="plan-price">599 <span>kr / mnd eks. mva.</span></div>
         <div class="plan-price-note"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> Ingen bindingstid</div>
         <ul class="plan-features">
           <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> Inntil 2 endringer per måned</li>
           <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> Tekst-, bilde- og kontaktoppdateringer</li>
           <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> Svar innen 2–3 virkedager</li>
-          <li class="optional"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="4"/></svg> Kontaktskjema (+100 kr/mnd, avtales separat)</li>
+          <li class="optional"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="4"/></svg> Kontaktskjema (+100 kr/mnd eks. mva., avtales separat)</li>
         </ul>
         <a href="#kontakt" class="btn btn-primary plan-select-btn" data-plan="Liten" data-price="599">Velg Liten</a>
       </div>
@@ -540,14 +540,14 @@
         <div class="plan-name">02 — Medium</div>
         <div class="plan-title">Medium</div>
         <div class="plan-desc">For dere som endrer og legger til litt jevnlig.</div>
-        <div class="plan-price">1499 <span>kr / mnd</span></div>
+        <div class="plan-price">1499 <span>kr / mnd eks. mva.</span></div>
         <div class="plan-price-note"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> Ingen bindingstid</div>
         <ul class="plan-features">
           <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> Inntil 5 endringer per måned</li>
           <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> Mindre design-justeringer og nye seksjoner</li>
           <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> Svar innen 1–2 virkedager</li>
           <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> Årlig gjennomgang av design og funksjonalitet</li>
-          <li class="optional"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="4"/></svg> Kontaktskjema (+100 kr/mnd, avtales separat)</li>
+          <li class="optional"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="4"/></svg> Kontaktskjema (+100 kr/mnd eks. mva., avtales separat)</li>
         </ul>
         <a href="#kontakt" class="btn btn-primary plan-select-btn" data-plan="Medium" data-price="1499">Velg Medium</a>
       </div>
@@ -556,7 +556,7 @@
         <div class="plan-name">03 — Stor</div>
         <div class="plan-title">Stor</div>
         <div class="plan-desc">For dere som ønsker siden fulgt tett opp.</div>
-        <div class="plan-price">3999 <span>kr / mnd</span></div>
+        <div class="plan-price">3999 <span>kr / mnd eks. mva.</span></div>
         <div class="plan-price-note"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> Ingen bindingstid</div>
         <ul class="plan-features">
           <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> Inntil 20 endringer per måned</li>
@@ -609,7 +609,7 @@
     btn.addEventListener('click', function() {
       const melding = document.getElementById('melding');
       if (melding && !melding.value.trim()) {
-        melding.value = 'Jeg er interessert i ' + btn.dataset.plan + '-abonnementet (' + btn.dataset.price + ' kr/mnd).';
+        melding.value = 'Jeg er interessert i ' + btn.dataset.plan + '-abonnementet (' + btn.dataset.price + ' kr/mnd eks. mva.).';
       }
     });
   });
