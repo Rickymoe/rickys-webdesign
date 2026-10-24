@@ -130,6 +130,7 @@
     white-space:nowrap;
     transition:background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
   }
+  .nav-cta, .btn-ghost, .btn-outline-light{ --sheen:var(--accent); }
   .nav-cta:hover{ background:var(--accent); border-color:var(--accent); color:#fff; }
   .nav-mobile-hide{ display:flex; }
   @media (max-width:760px){
@@ -272,13 +273,14 @@
     box-shadow:0 0 0 1px var(--accent), var(--shadow);
     margin-top:-8px;
   }
-  .plan.premium{
-    border-color:var(--ink);
-    box-shadow:0 0 0 1px var(--ink);
-  }
+  .plan{ --sheen:var(--accent); }
+  .plan.featured{ --sheen:rgba(255,255,255,0.95); }
+  .plan.btn-sheen::after{ padding:3px; }
+  .plan.featured.btn-sheen::after{ animation-delay:1.8s; }
+  .plan.premium.btn-sheen::after{ animation-delay:3.6s; }
   @media (max-width:900px){ .plan.featured{ margin-top:0; } }
   .plan-badge{
-    position:absolute; top:-13px; left:28px;
+    position:absolute; top:28px; right:24px;
     background:var(--accent); color:#fff;
     font-family:'IBM Plex Mono', monospace; font-size:11px;
     padding:5px 10px; border-radius:5px; letter-spacing:0.04em;
@@ -324,15 +326,17 @@
   .contact-detail{ display:flex; justify-content:center; gap:14px; margin-top:28px; font-family:'IBM Plex Mono', monospace; font-size:12.5px; color:#4A5540; }
   .contact-detail .k{ text-transform:uppercase; letter-spacing:0.06em; }
   .contact-actions{ display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:14px; }
-  .btn-sheen{ position:relative; overflow:hidden; }
+  .btn-sheen{ position:relative; }
   .btn-sheen::after{
-    content:''; position:absolute; inset:0; pointer-events:none;
-    background:linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.4) 50%, transparent 65%);
-    transform:translateX(-120%);
+    content:''; position:absolute; inset:-1px; padding:2px; border-radius:inherit; pointer-events:none;
+    background:linear-gradient(105deg, transparent 35%, var(--sheen, rgba(255,255,255,0.95)) 50%, transparent 65%) no-repeat;
+    background-size:300% 100%; background-position:100% 0;
+    -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor; mask-composite:exclude;
     animation:btn-sheen 6s ease-in-out infinite;
   }
-  @keyframes btn-sheen{ 0%, 70%{ transform:translateX(-120%); } 100%{ transform:translateX(120%); } }
-  .btn-outline-light{ background:rgba(251,250,243,0.4); color:var(--ink); border-color:#5A6350; }
+  @keyframes btn-sheen{ 0%, 70%{ background-position:100% 0; } 100%{ background-position:0 0; } }
+  .btn-outline-light{ background:rgba(251,250,243,0.4); color:var(--ink); border-color:transparent; }
   .btn-outline-light:hover{ background:rgba(251,250,243,0.65); border-color:var(--accent); transform:translateY(-1px); }
 
   footer{
@@ -365,7 +369,7 @@
       <li><a href="#abonnement">Priser</a></li>
     </ul>
     <span class="nav-marker" aria-hidden="true"></span>
-    <a href="#kontakt" class="nav-cta">Ta kontakt</a>
+    <a href="#kontakt" class="nav-cta btn-sheen">Ta kontakt</a>
   </nav>
 </header>
 
@@ -375,8 +379,8 @@
     <h1>Nettsiden din fortjener bedre enn <em>2014</em>.</h1>
     <p class="hero-lede">Vi bygger en moderne nettside for bedriften din — og fortsetter å holde den oppdatert etterpå, som en fast del av avtalen.</p>
     <div class="hero-ctas">
-      <a href="#abonnement" class="btn btn-primary">Se abonnementene</a>
-      <a href="#kontakt" class="btn btn-ghost">Ta kontakt</a>
+      <a href="#abonnement" class="btn btn-primary btn-sheen">Se abonnementene</a>
+      <a href="#kontakt" class="btn btn-ghost btn-sheen">Ta kontakt</a>
     </div>
     <div class="hero-meta">
       <span>— Bygget for mobil og desktop</span>
@@ -442,7 +446,7 @@
     </div>
 
     <div class="plans">
-      <div class="plan reveal" style="transition-delay:0s;">
+      <div class="plan btn-sheen reveal" style="transition-delay:0s;">
         <div class="plan-name">01 — Liten</div>
         <div class="plan-title">Liten</div>
         <div class="plan-desc">For dere med stabilt innhold og sjeldne endringer.</div>
@@ -456,7 +460,7 @@
         </ul>
       </div>
 
-      <div class="plan featured reveal" style="transition-delay:0.1s;">
+      <div class="plan featured btn-sheen reveal" style="transition-delay:0.1s;">
         <div class="plan-badge">Mest valgt</div>
         <div class="plan-name">02 — Medium</div>
         <div class="plan-title">Medium</div>
@@ -472,7 +476,7 @@
         </ul>
       </div>
 
-      <div class="plan premium reveal" style="transition-delay:0.2s;">
+      <div class="plan premium btn-sheen reveal" style="transition-delay:0.2s;">
         <div class="plan-name">03 — Stor</div>
         <div class="plan-title">Stor</div>
         <div class="plan-desc">For dere som ønsker siden fulgt tett opp.</div>
@@ -497,7 +501,7 @@
       <p class="contact-lede">Send en e-post eller ring, så tar vi en uforpliktende prat om hva som passer best.</p>
       <div class="contact-actions">
         <a href="mailto:webdesignbyricky@gmail.com" class="btn btn-primary btn-sheen">webdesignbyricky@gmail.com</a>
-        <a href="tel:+4794020777" class="btn btn-outline-light">94 020 777</a>
+        <a href="tel:+4794020777" class="btn btn-outline-light btn-sheen">94 020 777</a>
       </div>
       <div class="contact-detail"><span class="k">Område</span><span>Der hvor udatert design bor</span></div>
     </div>
