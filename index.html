@@ -233,7 +233,7 @@
     transition:background 0.2s ease;
   }
   @media (hover:hover){
-    .service-card:hover{ background:var(--bg-alt); }
+    .service-card:hover{ background:var(--bg-alt); background:color-mix(in srgb, var(--bg-alt) 35%, var(--surface)); }
     .service-card:hover .service-icon{ color:var(--accent-ink); }
   }
   .service-icon{ margin-bottom:16px; color:var(--accent); transition:color 0.25s ease; }
@@ -244,7 +244,7 @@
 
   /* ---------- Abonnement ---------- */
   .pricing{ background:var(--bg-alt); }
-  .pricing-head{ text-align:center; max-width:560px; margin:0 auto 52px; }
+  .pricing-head{ margin:0 0 52px; }
   .pricing-head h2{ font-size:clamp(28px,3.4vw,38px); margin-bottom:14px; }
   .pricing-head p{ color:var(--ink-soft); font-size:17px; }
   .trust-strip{
@@ -314,17 +314,17 @@
   .plan-features li.optional svg{ color:var(--ink-faint); }
 
   /* ---------- Kontakt ---------- */
-  .contact{ background:var(--ink); color:#EDEEDF; }
-  .contact h2{ color:#fff; font-size:clamp(28px,3.4vw,38px); margin-bottom:16px; }
-  .contact-lede{ color:#B7BCA3; font-size:17px; max-width:38ch; margin-bottom:28px; }
-  .contact-detail{ display:flex; gap:14px; margin-bottom:16px; font-size:15px; }
-  .contact-detail .k{ font-family:'IBM Plex Mono', monospace; color:#828C6E; min-width:88px; font-size:12.5px; padding-top:2px; text-transform:uppercase; letter-spacing:0.06em; }
-  .contact-actions{ display:flex; flex-wrap:wrap; gap:12px; margin-bottom:28px; }
-  .btn-outline-light{ background:transparent; color:#EDEEDF; border-color:#4E5A3F; }
+  .contact{ background:var(--warm); color:var(--ink); }
+  .contact h2{ color:var(--ink); font-size:clamp(28px,3.4vw,38px); margin-bottom:16px; }
+  .contact-lede{ color:#404B37; font-size:17px; max-width:38ch; margin:0 auto 28px; }
+  .contact-detail{ display:flex; justify-content:center; gap:14px; margin-bottom:16px; font-size:15px; }
+  .contact-detail .k{ font-family:'IBM Plex Mono', monospace; color:#4A5540; font-size:12.5px; padding-top:2px; text-transform:uppercase; letter-spacing:0.06em; }
+  .contact-actions{ display:flex; flex-wrap:wrap; justify-content:center; gap:12px; margin-bottom:28px; }
+  .btn-outline-light{ background:transparent; color:var(--ink); border-color:#5A6350; }
   .btn-outline-light:hover{ border-color:var(--accent); transform:translateY(-1px); }
 
   footer{
-    background:var(--ink); color:#828C6E; border-top:1px solid #2C3524;
+    background:var(--warm); color:#4A5540; border-top:1px solid rgba(35,46,30,0.16);
     padding:26px 0; font-family:'IBM Plex Mono', monospace; font-size:12px;
     position:relative; overflow:hidden;
   }
@@ -417,7 +417,7 @@
 <section class="pricing" id="abonnement">
   <div class="wrap">
     <div class="pricing-head reveal">
-      <div class="section-eyebrow" style="text-align:center;">Abonnement</div>
+      <div class="section-eyebrow">Abonnement</div>
       <h2>Én fast pris. Ingen overraskelser.</h2>
       <p>Nettsiden bygges opp først — abonnementet dekker alt vedlikeholdet etterpå.</p>
       <div class="trust-strip">
@@ -475,9 +475,9 @@
 </section>
 
 <section class="contact" id="kontakt">
-  <div class="wrap">
+  <div class="wrap hero-single">
     <div class="reveal">
-      <div class="section-eyebrow" style="color:var(--warm);">Kontakt</div>
+      <div class="eyebrow" style="justify-content:center; color:var(--accent-ink);">Kontakt</div>
       <h2>La Ricky bygge siden deres.</h2>
       <p class="contact-lede">Send en e-post eller ring, så tar vi en uforpliktende prat om hva som passer best.</p>
       <div class="contact-actions">
@@ -529,9 +529,9 @@
   (function(){
     const T = {
       cell: 16, size: 8, radius: 1.5,
-      ink: '35,46,30', gold: '189,139,59', goldOnDark: '205,160,80',
+      ink: '35,46,30', gold: '189,139,59',
       heroBase: 1, restBase: 0.5, heroFade: 140,
-      inkAlpha: 0.064, darkAlpha: 0.06,
+      inkAlpha: 0.064,
       calmText: 0.98, calmBlock: 0.99, feather: 190,
       glowRadius: 170, glowAlpha: 0.75, glowInCalm: 0.3,
       waveSpeed: 400, waveLead: 36, waveTail: 120, waveSlant: 0.12, waveAlpha: 0.8, waveInCalm: 0.2, wavePop: 4, waveDelay: 250,
@@ -541,7 +541,7 @@
     const cv = document.getElementById('grid-field');
     const ctx = cv.getContext('2d');
     const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    let dpr = 1, vw = 0, vh = 0, cols = 0, rows = 0, base, calm, dark, docH = 0;
+    let dpr = 1, vw = 0, vh = 0, cols = 0, rows = 0, base, calm, docH = 0;
     let tx = 0, ty = 0, gx = 0, gy = 0, gs = 0, lastMove = -1e9, dirty = true;
     let waveStart = null, waveX = 0, waveOn = false, ready = false;
     let hh = 0, hrows = 0, hcalm;
@@ -585,20 +585,16 @@
       if(cv.width !== vw * dpr || cv.height !== vh * dpr){ cv.width = vw * dpr; cv.height = vh * dpr; }
       docH = document.documentElement.scrollHeight;
       cols = Math.ceil(vw / T.cell) + 1; rows = Math.ceil(docH / T.cell) + 1;
-      base = new Float32Array(cols * rows); calm = new Float32Array(cols * rows); dark = new Uint8Array(cols * rows);
+      base = new Float32Array(cols * rows); calm = new Float32Array(cols * rows);
 
       const sy = scrollY;
       const hero = document.querySelector('.hero').getBoundingClientRect();
       const heroBottom = hero.bottom + sy;
-      const zones = [...document.querySelectorAll('.contact,footer')].map(el => {
-        const b = el.getBoundingClientRect(); return [b.top + sy, b.bottom + sy];
-      });
       for(let y = 0; y < rows; y++){
         const cy = y * T.cell + T.cell / 2;
         const t = Math.min(1, Math.max(0, (cy - (heroBottom - T.heroFade)) / T.heroFade));
         const bv = T.heroBase + (T.restBase - T.heroBase) * t * t * (3 - 2 * t);
-        const isDark = zones.some(z => cy >= z[0] && cy < z[1]);
-        for(let x = 0; x < cols; x++){ base[y * cols + x] = bv; dark[y * cols + x] = isDark ? 1 : 0; }
+        for(let x = 0; x < cols; x++){ base[y * cols + x] = bv; }
       }
 
       collect().forEach(([l, t, r, b, w]) => stamp(calm, rows, l, t, r, b, w, T.feather));
@@ -622,7 +618,7 @@
       const gr = T.glowRadius, gr2 = gr * gr, glowOn = gs > 0.01;
       const wl = T.waveLead, wt = T.waveTail;
 
-      function cell(px, py, a, cl, isDark){
+      function cell(px, py, a, cl){
         let ga = 0, w = 0;
         if(glowOn){
           const dx = px + 4 - gx, dy = py + 4 - gy, d2 = dx * dx + dy * dy;
@@ -636,18 +632,17 @@
           w = u > 0 ? Math.exp(-(u / wl) * (u / wl)) : Math.exp(u / wt);
         }
         if(a < 0.004 && ga < 0.004 && w < 0.02) return;
-        const col = isDark ? T.goldOnDark : null;
         if(a >= 0.004){
-          ctx.fillStyle = 'rgba(' + (col || T.ink) + ',' + a + ')';
+          ctx.fillStyle = 'rgba(' + T.ink + ',' + a + ')';
           ctx.beginPath(); ctx.roundRect(px, py, T.size, T.size, T.radius); ctx.fill();
         }
         if(ga >= 0.004){
-          ctx.fillStyle = 'rgba(' + (col || T.gold) + ',' + ga + ')';
+          ctx.fillStyle = 'rgba(' + T.gold + ',' + ga + ')';
           ctx.beginPath(); ctx.roundRect(px, py, T.size, T.size, T.radius); ctx.fill();
         }
         if(w >= 0.02){
           const pop = T.wavePop * w, wa = w * T.waveAlpha * (1 - (1 - T.waveInCalm) * cl);
-          ctx.fillStyle = 'rgba(' + (col || T.gold) + ',' + wa + ')';
+          ctx.fillStyle = 'rgba(' + T.gold + ',' + wa + ')';
           ctx.beginPath(); ctx.roundRect(px - pop / 2, py - pop / 2, T.size + pop, T.size + pop, T.radius + pop / 4); ctx.fill();
         }
       }
@@ -658,7 +653,7 @@
         if(py < hh) continue;
         for(let x = 0; x < cols; x++){
           const i = y * cols + x;
-          cell(x * c + 3, py, base[i] * (1 - calm[i]) * (dark[i] ? T.darkAlpha : T.inkAlpha), calm[i], dark[i]);
+          cell(x * c + 3, py, base[i] * (1 - calm[i]) * T.inkAlpha, calm[i]);
         }
       }
       for(let y = 0; y < hrows; y++){
@@ -666,7 +661,7 @@
         if(py + T.size > hh) break;
         for(let x = 0; x < cols; x++){
           const i = y * cols + x;
-          cell(x * c + 3, py, (1 - hcalm[i]) * T.inkAlpha * T.headerBoost, hcalm[i], 0);
+          cell(x * c + 3, py, (1 - hcalm[i]) * T.inkAlpha * T.headerBoost, hcalm[i]);
         }
       }
       dirty = false;
