@@ -169,10 +169,7 @@
     font-weight:600;
     margin-bottom:22px;
   }
-  h1 em{
-    font-style:normal;
-    color:var(--accent);
-  }
+  h1 em{ font-style:normal; }
   .hero-lede{
     font-size:19px;
     color:var(--ink-soft);
@@ -314,12 +311,19 @@
   .plan-features li.optional svg{ color:var(--ink-faint); }
 
   /* ---------- Kontakt ---------- */
-  .contact{ background:var(--warm); color:var(--ink); }
-  .contact h2{ color:var(--ink); font-size:clamp(28px,3.4vw,38px); margin-bottom:16px; }
-  .contact-lede{ color:#404B37; font-size:17px; max-width:38ch; margin:0 auto 28px; }
-  .contact-detail{ display:flex; justify-content:center; gap:14px; margin-bottom:16px; font-size:15px; }
-  .contact-detail .k{ font-family:'IBM Plex Mono', monospace; color:#4A5540; font-size:12.5px; padding-top:2px; text-transform:uppercase; letter-spacing:0.06em; }
-  .contact-actions{ display:flex; flex-wrap:wrap; justify-content:center; gap:12px; margin-bottom:28px; }
+  .contact{
+    background:radial-gradient(ellipse 900px 500px at 50% 110%, rgba(251,250,243,0.55), transparent 65%), var(--warm);
+    color:var(--ink);
+    padding:110px 0 100px;
+    position:relative; overflow:hidden;
+  }
+  @media (max-width:720px){ .contact{ padding:72px 0 64px; } }
+  .contact h2{ color:var(--ink); font-size:clamp(34px,4.6vw,54px); line-height:1.06; font-weight:600; margin-bottom:22px; }
+  .contact h2 em{ font-style:normal; }
+  .contact-lede{ color:#404B37; font-size:19px; max-width:44ch; margin:0 auto 32px; }
+  .contact-detail{ display:flex; justify-content:center; gap:14px; margin-top:28px; font-family:'IBM Plex Mono', monospace; font-size:12.5px; color:#4A5540; }
+  .contact-detail .k{ text-transform:uppercase; letter-spacing:0.06em; }
+  .contact-actions{ display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:14px; }
   .btn-outline-light{ background:transparent; color:var(--ink); border-color:#5A6350; }
   .btn-outline-light:hover{ border-color:var(--accent); transform:translateY(-1px); }
 
@@ -431,7 +435,7 @@
         <div class="plan-name">01 — Liten</div>
         <div class="plan-title">Liten</div>
         <div class="plan-desc">For dere med stabilt innhold og sjeldne endringer.</div>
-        <div class="plan-price">599 <span>kr / mnd eks. mva.</span></div>
+        <div class="plan-price">499 <span>kr / mnd eks. mva.</span></div>
         <div class="plan-price-note"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> Ingen bindingstid</div>
         <ul class="plan-features">
           <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> Inntil 2 endringer per måned</li>
@@ -446,7 +450,7 @@
         <div class="plan-name">02 — Medium</div>
         <div class="plan-title">Medium</div>
         <div class="plan-desc">For dere som endrer og legger til litt jevnlig.</div>
-        <div class="plan-price">1499 <span>kr / mnd eks. mva.</span></div>
+        <div class="plan-price">1299 <span>kr / mnd eks. mva.</span></div>
         <div class="plan-price-note"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> Ingen bindingstid</div>
         <ul class="plan-features">
           <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> Inntil 5 endringer per måned</li>
@@ -461,7 +465,7 @@
         <div class="plan-name">03 — Stor</div>
         <div class="plan-title">Stor</div>
         <div class="plan-desc">For dere som ønsker siden fulgt tett opp.</div>
-        <div class="plan-price">3999 <span>kr / mnd eks. mva.</span></div>
+        <div class="plan-price">2999 <span>kr / mnd eks. mva.</span></div>
         <div class="plan-price-note"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> Ingen bindingstid</div>
         <ul class="plan-features">
           <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> Inntil 20 endringer per måned</li>
@@ -478,7 +482,7 @@
   <div class="wrap hero-single">
     <div class="reveal">
       <div class="eyebrow" style="justify-content:center; color:var(--accent-ink);">Kontakt</div>
-      <h2>La Ricky bygge siden deres.</h2>
+      <h2>La Ricky bygge <em>siden deres</em>.</h2>
       <p class="contact-lede">Send en e-post eller ring, så tar vi en uforpliktende prat om hva som passer best.</p>
       <div class="contact-actions">
         <a href="mailto:webdesignbyricky@gmail.com" class="btn btn-primary">webdesignbyricky@gmail.com</a>
