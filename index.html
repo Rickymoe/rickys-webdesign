@@ -588,7 +588,7 @@
     const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
     let dpr = 1, vw = 0, vh = 0, cols = 0, rows = 0, base, calm, dark, docH = 0;
     let tx = 0, ty = 0, gx = 0, gy = 0, gs = 0, lastMove = -1e9, dirty = true;
-    let waveStart = null, waveY = 0, waveOn = false;
+    let waveStart = null, waveX = 0, waveOn = false;
 
     function collect(){
       const sy = scrollY, out = [];
@@ -669,7 +669,7 @@
           }
           let w = 0;
           if(waveOn){
-            const u = y * c + c / 2 + px * T.waveSlant - waveY;
+            const u = px + py * T.waveSlant - waveX;
             w = u > 0 ? Math.exp(-(u / wl) * (u / wl)) : Math.exp(u / wt);
           }
           if(a < 0.004 && ga < 0.004 && w < 0.02) continue;
@@ -698,8 +698,8 @@
         gx += (tx - gx) * 0.14; gy += (ty - gy) * 0.14;
         if(gs > 0.005 || Math.abs(tx - gx) > 0.5 || Math.abs(ty - gy) > 0.5) dirty = true;
         if(waveStart !== null && now >= waveStart){
-          waveY = -T.waveTail + (now - waveStart) / 1000 * T.waveSpeed;
-          waveOn = waveY < docH + T.waveLead * 3;
+          waveX = -T.waveTail + (now - waveStart) / 1000 * T.waveSpeed;
+          waveOn = waveX < vw + T.waveLead * 3;
           dirty = true;
         }
       }
