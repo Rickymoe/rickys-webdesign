@@ -278,11 +278,6 @@
     box-shadow:0 0 0 1px var(--accent), var(--shadow);
     margin-top:-8px;
   }
-  .plan{ --sheen:var(--accent); }
-  .plan.featured{ --sheen:rgba(255,255,255,0.95); }
-  .plan.btn-sheen::after{ padding:3px; }
-  .plan.featured.btn-sheen::after{ animation-delay:1.8s; }
-  .plan.premium.btn-sheen::after{ animation-delay:3.6s; }
   @media (max-width:900px){ .plan.featured{ margin-top:0; } }
   .plan-badge{
     position:absolute; top:28px; right:24px;
@@ -450,7 +445,7 @@
     </div>
 
     <div class="plans">
-      <div class="plan btn-sheen reveal" style="transition-delay:0s;">
+      <div class="plan reveal" style="transition-delay:0s;">
         <div class="plan-name">01 — Liten</div>
         <div class="plan-title">Liten</div>
         <div class="plan-desc">For dere med stabilt innhold og sjeldne endringer.</div>
@@ -464,7 +459,7 @@
         </ul>
       </div>
 
-      <div class="plan featured btn-sheen reveal" style="transition-delay:0.1s;">
+      <div class="plan featured reveal" style="transition-delay:0.1s;">
         <div class="plan-badge">Mest valgt</div>
         <div class="plan-name">02 — Medium</div>
         <div class="plan-title">Medium</div>
@@ -480,7 +475,7 @@
         </ul>
       </div>
 
-      <div class="plan premium btn-sheen reveal" style="transition-delay:0.2s;">
+      <div class="plan premium reveal" style="transition-delay:0.2s;">
         <div class="plan-name">03 — Stor</div>
         <div class="plan-title">Stor</div>
         <div class="plan-desc">For dere som ønsker siden fulgt tett opp.</div>
